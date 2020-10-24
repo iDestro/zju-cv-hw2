@@ -63,8 +63,6 @@ def evaluate(config, model, data_iter, test=False):
             labels_all = np.append(labels_all, labels)
             predict_all = np.append(predict_all, y_pred_labels)
 
-    print(labels_all)
-    print(predict_all)
     acc = metrics.accuracy_score(labels_all, predict_all)
     if test:
         report = metrics.classification_report(labels_all, predict_all, target_names=config.class_list, digits=4)
