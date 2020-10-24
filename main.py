@@ -4,11 +4,13 @@ from torch.utils.data import DataLoader
 from model import Config, LeNet
 from train_eval import train
 
-train_set = torchvision.datasets.MNIST('./data',
+train_set = torchvision.datasets.MNIST('./',
                                        train=True,
+                                       download=True,
                                        transform=transforms.ToTensor())
-test_set = torchvision.datasets.MNIST('./data',
+test_set = torchvision.datasets.MNIST('./',
                                       train=False,
+                                      download=True,
                                       transform=transforms.ToTensor())
 train_iter = DataLoader(train_set,
                         shuffle=True,
@@ -17,7 +19,6 @@ train_iter = DataLoader(train_set,
 test_iter = DataLoader(test_set,
                        shuffle=True,
                        batch_size=128)
-
 config = Config()
 model = LeNet()
 

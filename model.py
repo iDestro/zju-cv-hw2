@@ -4,9 +4,12 @@ import torch
 
 class Config:
     def __init__(self):
+        self.model_name = 'MNIST'
         self.learn_rate = 0.02
         self.num_epochs = 20
-        self.batch_size = 100
+        self.batch_size = 128
+        self.class_list = [i for i in range(10)]
+        self.save_path = './saved_dict/' + self.model_name + '.ckpt'  # 模型训练结果
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 
