@@ -22,21 +22,17 @@ def train(model, config, train_iter, test_iter):
             batch_loss.backward()
             optimizer.step()
             if total_batch % 100 == 0:
-                # 將結果 print 出來
-                y_pred_labels = torch.max(y_pred, dim=1)[1].cpu()
-                train_acc = metrics.accuracy_score(y, y_pred_labels)
+                y_pred_labels = torch.max(y_pred, dim=1)[1].cpu().numpy()
+                train_acc = metrics.accuracy_score(y.cpu().numpy(), y_pred_labels)
                 train_loss = batch_loss.item()
                 msg = 'Time: {},  Train Loss: {},  Train Acc: {}'
                 time_diff = timedelta(seconds=int(round(time.time()-epoch_start_time)))
                 print(msg.format(time_diff, train_loss, train_acc))
-                # print(time.time()-epoch_start_time, train_acc, train_loss)
             total_batch += 1
     test(config, model, test_iter)
 
 
 def test(config, model, test_iter):
-    # test
-    # model.load_state_dict(torch.load(config.save_path))
     model.eval()
     test_acc, test_loss, test_report, test_confusion = evaluate(config, model, test_iter, test=True)
     msg = 'Test Loss: {0:>5.2},  Test Acc: {1:>6.2%}'

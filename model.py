@@ -1,5 +1,6 @@
 import torch.nn as nn
 import torch
+from tensorboardX import SummaryWriter
 
 
 class Config:
@@ -7,7 +8,7 @@ class Config:
         self.model_name = 'MNIST'
         self.learn_rate = 0.02
         self.num_epochs = 20
-        self.batch_size = 128
+        self.batch_size = 1024
         self.class_list = [str(i) for i in range(10)]
         self.save_path = './saved_dict/' + self.model_name + '.ckpt'  # 模型训练结果
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -38,3 +39,9 @@ class LeNet(nn.Module):
         x = self.fc2(x)
         return x
 
+
+if __name__ == '__main__':
+    dummy_input = torch.rand(13, 1, 28, 28)  # 假设输入13张1*28*28的图片
+    model = LeNet()
+    with SummaryWriter(comment='LeNet') as w:
+        w.add_graph(model, dummy_input)
