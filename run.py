@@ -4,7 +4,12 @@ from torch.utils.data import DataLoader
 from model import Config, LeNet
 from train_eval import train
 from utils import visualize_network_architecture
+import argparse
 
+parser = argparse.ArgumentParser(description='Chinese Text Classification')
+parser.add_argument('--flag', '-f', action='store_true', help='Is the number of convolution kernels halved?')
+parser.add_argument('--dropout_rate', '-d', type=float, default=0.0, help='Please set a dropout rate')
+args = parser.parse_args()
 
 if __name__ == '__main__':
 
@@ -17,6 +22,11 @@ if __name__ == '__main__':
                                           download=True,
                                           transform=transforms.ToTensor())
     config = Config()
+    print(args.flag)
+    config.reduce = 2 if args.flag else 1
+    config.dropout = args.dropout_rate
+    print(config.reduce)
+    print(config.dropout)
     train_iter = DataLoader(train_set,
                             shuffle=True,
                             batch_size=config.batch_size)
@@ -25,6 +35,6 @@ if __name__ == '__main__':
                            shuffle=True,
                            batch_size=config.batch_size)
 
-    model = LeNet()
+    model = LeNet(config)
     visualize_network_architecture(model)
     train(model, config, train_iter, test_iter)
